@@ -6,6 +6,9 @@ A proof of concept site demonstrating how to call a chat model from a serverless
 
 ![HAP's silly 404 page screenshot](images/hap-silly-404.netlify.app_kflflf.png)
 
+> [!tip]
+> **Want to go straight to the 404?** [hap-silly-404.netlify.app/404](https://hap-silly-404.netlify.app/404)
+
 The site has a custom 404 page that fetches a witty roast from an AI model every time someone lands on a page that does not exist. A random HAP robot pose appears alongside each roast for visual flair.
 
 ## How it works
@@ -41,7 +44,7 @@ Set these in the Netlify dashboard under **Site configuration > Environment vari
 
 For local development, create a `.env` file in the project root:
 
-```
+```bash
 GROQ_API_KEY=your-key-here
 ```
 
