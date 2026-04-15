@@ -1,6 +1,10 @@
 # HAP's silly 404
 
+[![Netlify Status](https://api.netlify.com/api/v1/badges/e1c80bb8-f849-4c85-9a20-c10b0f9280fb/deploy-status)](https://hap-silly-404.netlify.app)
+
 A proof of concept site demonstrating how to call a chat model from a serverless function with basic safety guardrails in place.
+
+![HAP's silly 404 page screenshot](images/hap-silly-404.netlify.app_kflflf.png)
 
 The site has a custom 404 page that fetches a witty roast from an AI model every time someone lands on a page that does not exist. A random HAP robot pose appears alongside each roast for visual flair.
 
