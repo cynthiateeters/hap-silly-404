@@ -68,7 +68,7 @@ Everything in this part is setup and verification. Do not start the tutorials or
 4. Start the local dev server:
 
    ```bash
-   netlify dev
+   npm run dev
    ```
 
 5. Visit `http://localhost:8888/404`. You should see the HAP 404 page load with a roast. Now confirm the backend is actually working — roasts look the same whether they're live or canned, so you need to check two things:

@@ -19,7 +19,7 @@ Quick reference for every command you'll use in this repo.
 - `npm run format:check` — check formatting without rewriting; this is what CI runs
 - `npm run secretlint` — scan staged and tracked files for accidentally committed secrets
 - `npm run check` — runs lint + format:check + secretlint together; run this before every commit
-- `netlify dev` — start the local dev server at `http://localhost:8888` with functions support; always use port 8888, not 3999
+- `npm run dev` — start the local dev server at `http://localhost:8888` with functions support; always use port 8888, not 3999
 
 ## Test commands
 

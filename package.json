@@ -10,6 +10,7 @@
     "format:check": "prettier --check .",
     "secretlint": "secretlint \"**/*\"",
     "check": "npm run lint && npm run format:check && npm run secretlint",
+    "dev": "NETLIFY_DEV=true netlify dev",
     "prepare": "husky"
   },
   "lint-staged": {

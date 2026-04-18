@@ -106,7 +106,7 @@ This updates the live site so the function knows its own origin. Without this st
 Now start the local dev server:
 
 ```bash
-netlify dev
+npm run dev
 ```
 
 Visit `http://localhost:8888/404`. Open DevTools → Network → click the `insult` request → Preview. You should see:
