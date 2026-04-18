@@ -39,6 +39,8 @@ If any of those aren't done yet, stop and follow the setup steps in `README.md` 
 
 ## Part 1 — Clone and verify locally
 
+If you are reading this file in your editor, you have already cloned the repo. Skip step 1 and start at step 2.
+
 Everything in this part is setup and verification. Do not start the tutorials or either track until the local dev server is returning live roasts. If something doesn't work, **stop and troubleshoot before continuing** — a broken local environment will cause confusing failures throughout the assignment.
 
 1. Clone your fork:
