@@ -16,7 +16,13 @@ A static site deployed on Netlify with a custom 404 page that fetches a passive-
 
 ## Environment variables
 
-`GROQ_API_KEY` — required for live roasts; set in Netlify dashboard under site environment variables. `GROQ_MODEL` is optional (defaults to `llama-3.3-70b-versatile`).
+Set in the Netlify dashboard under Site configuration → Environment variables. Local dev pulls them via `ntl dev`.
+
+- `GROQ_API_KEY` — required for live roasts. Without it, the function returns a hardcoded fallback insult.
+- `GROQ_MODEL` — optional; defaults to `llama-3.3-70b-versatile`.
+- `SITE_URL` — required **in production only**; canonical site origin used for the CORS allowlist and the function's origin check. Set to `https://hap-silly-404.netlify.app` (or your site's URL). For local `ntl dev`, the function auto-detects `NETLIFY_DEV=true` and defaults to `http://localhost:8888`, so no local configuration is needed.
+
+A non-secret override is supported for unusual local setups: `SITE_URL=http://localhost:9000 ntl dev` lets you run on a different port. Never put secrets like `GROQ_API_KEY` in a local `.env` — those live in the Netlify dashboard.
 
 ## Local development
 
@@ -25,6 +31,11 @@ netlify dev
 ```
 
 This starts a local server with functions support. Visit `http://localhost:8888/this-page-does-not-exist` to trigger the 404 page.
+
+## Docs and reports
+
+- `docs/` — student-facing tutorials; ships with the repo and is tracked in git. Add new teaching content here.
+- `reports/` — instructor working documents; gitignored, never committed. The security audit and other reference material live here.
 
 ## HAP poses
 

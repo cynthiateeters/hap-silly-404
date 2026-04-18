@@ -1,0 +1,67 @@
+/* HAP Silly 404 — page-specific styles */
+
+.error-code {
+  font-size: clamp(5rem, 20vw, 10rem);
+  font-weight: 900;
+  color: var(--hap-orange);
+  line-height: 1;
+  margin-bottom: 0.25rem;
+}
+
+.roast-box {
+  background-color: var(--hap-card-bg);
+  border: 2px solid var(--hap-orange);
+  border-radius: var(--hap-radius);
+  padding: 2rem;
+  margin: 2rem 0;
+  text-align: center;
+}
+
+.roast-label {
+  font-size: 0.8rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--hap-text-muted);
+  margin-bottom: 0.75rem;
+}
+
+.roast-text {
+  font-size: clamp(1.2rem, 3vw, 1.75rem);
+  font-weight: 700;
+  color: var(--hap-brown);
+  line-height: 1.4;
+  min-height: 3rem;
+}
+
+.roast-text.loading {
+  font-style: italic;
+  color: var(--hap-text-muted);
+  font-weight: 400;
+}
+
+.hap-pose {
+  margin: 1.5rem auto 0;
+  text-align: center;
+}
+
+.hap-pose img {
+  width: 100%;
+  max-width: 320px;
+  height: auto;
+  border-radius: 8%;
+}
+
+.hap-pose figcaption {
+  margin-top: 0.5rem;
+  font-size: 0.9rem;
+  color: var(--hap-text-muted);
+  font-style: italic;
+}
+
+.error-nav {
+  margin-top: 2rem;
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
