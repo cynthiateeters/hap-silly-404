@@ -8,12 +8,21 @@ updated: 2026-04-18
 
 # Assignment checklist
 
-## Setup
+## Before you start
 
-- [ ] Fork and clone the repo
-- [ ] Run `npm install`
-- [ ] Run `netlify login` and `netlify link`
-- [ ] Run `netlify dev` — confirm `http://localhost:8888/404` loads with a roast
+- [ ] Groq API key generated at console.groq.com
+- [ ] Repo forked on GitHub
+- [ ] Netlify site created
+- [ ] `GROQ_API_KEY` added to Netlify dashboard environment variables
+- [ ] `SITE_URL` added to Netlify dashboard environment variables
+- [ ] Netlify CLI installed (`npm install -g netlify-cli`)
+
+## Part 1 — Clone and verify locally
+
+- [ ] Repo cloned and `npm install` run
+- [ ] `netlify login` and `netlify link` completed
+- [ ] `netlify dev` running
+- [ ] `http://localhost:8888/404` loads with a **live** roast (not a canned fallback)
 - [ ] Read `AGENTS.md`
 
 ## Vitest and specs

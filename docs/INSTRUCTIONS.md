@@ -24,21 +24,41 @@ Both tracks follow the same workflow: propose → spec → implement → verify.
 
 ---
 
-## Before you start
+## Before you start — accounts and tools
 
-You should have:
+Do these once before touching any code. The order matters.
 
-- A [Netlify account](https://netlify.com) (free)
-- A [Groq API key](https://console.groq.com) (free tier) set in the Netlify dashboard
-- Node.js installed (v22 or later)
-- The Netlify CLI installed: `npm install -g netlify-cli`
-- Git and a GitHub account
+**1. Get a Groq API key**
+
+Go to [console.groq.com](https://console.groq.com), create a free account, and generate an API key. Copy it — you'll need it in the next step. Do not put it in any file.
+
+**2. Fork this repo on GitHub**
+
+Fork to your own account. Do not clone yet.
+
+**3. Create a Netlify site and add the secret**
+
+- Go to [app.netlify.com](https://app.netlify.com) and create a new site. You can deploy from your fork or create a blank site — either works.
+- In the Netlify dashboard: **Site configuration → Environment variables → Add variable**
+  - Key: `GROQ_API_KEY` — Value: your key from step 1
+  - Key: `SITE_URL` — Value: your Netlify site URL (e.g. `https://your-site-name.netlify.app`)
+- The key lives here only. Never put it in code or `.env`.
+
+**4. Install the Netlify CLI**
+
+```bash
+npm install -g netlify-cli
+```
+
+**5. Install Node.js v22 or later** if you haven't already. Check with `node --version`.
 
 ---
 
-## Part 1 — Set up your fork
+## Part 1 — Clone and verify locally
 
-1. Fork this repo on GitHub and clone your fork:
+Everything in this part is setup and verification. Do not start the tutorials or either track until the local dev server is returning live roasts. If something doesn't work, **stop and troubleshoot before continuing** — a broken local environment will cause confusing failures throughout the assignment.
+
+1. Clone your fork:
 
    ```bash
    git clone https://github.com/YOUR_USERNAME/hap-silly-404.git
@@ -51,14 +71,14 @@ You should have:
    npm install
    ```
 
-3. Log in to the Netlify CLI and link your fork to a Netlify site:
+3. Log in to the Netlify CLI and link to your Netlify site:
 
    ```bash
    netlify login
    netlify link
    ```
 
-   If you don't have a Netlify site yet, run `netlify sites:create` first and give it a name. Then run `netlify link` and choose "Use current git remote origin."
+   Choose "Use current git remote origin" when prompted. This is what pulls your `GROQ_API_KEY` from the Netlify dashboard into your local dev session.
 
 4. Start the local dev server:
 
@@ -66,7 +86,11 @@ You should have:
    netlify dev
    ```
 
-5. Visit `http://localhost:8888/404` in your browser. Confirm the page loads and a roast appears. If the roast sounds canned ("You typed something. The server looked. Nothing.") rather than freshly generated, that's fine — it means `GROQ_API_KEY` isn't wired up yet. The function is still running correctly. Live roasts require the key to be set in the Netlify dashboard and the site to be linked.
+5. Visit `http://localhost:8888/404`. You should see the HAP 404 page with a freshly generated roast. The roast should feel unique and witty — not one of the canned fallbacks like "You typed something. The server looked. Nothing."
+
+   **If you're seeing canned fallbacks:** the function is running but `GROQ_API_KEY` isn't reaching it. Check that the key is set in the Netlify dashboard, that the site is correctly linked (`netlify status`), and that `netlify dev` output shows your environment variables loading. Do not proceed until you see live roasts.
+
+   **If the page doesn't load at all:** check the `netlify dev` terminal output for errors. Common causes: wrong port (use 8888, not 3999), site not linked, or a function crash. See `docs/tutorials/local-debugging-with-devtools-and-netlify-dev.md`.
 
 6. Read `AGENTS.md` before opening Copilot Chat. It is the contract between you and your AI agent. The security rules in it are non-negotiable.
 
