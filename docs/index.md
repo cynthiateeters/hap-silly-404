@@ -38,3 +38,4 @@ Read these before starting either track. They build on each other — reading or
 10. [OpenSpec — spec-driven development](tutorials/openspec-spec-driven-development.md) — the five-step propose/spec/approve/implement/verify workflow with example specs for both tracks
 11. [TDD with vitest](tutorials/tdd-with-vitest.md) — the red/green cycle, how to test the handler with native `Request`/`Response`, and the three tests to start from
 12. [Copilot agent mode](tutorials/copilot-agent-mode.md) — how to launch an agent session, choose Workspace mode, anchor prompts to spec files, and catch drift before it costs you
+13. [Copilot CLI — the real thing](tutorials/copilot-cli-the-real-thing.md) — the mental model shift from chat to agent, the four slash commands you'll actually use, instructions files, and the spec-driven workflow in one concrete practice pass

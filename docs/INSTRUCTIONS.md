@@ -140,6 +140,7 @@ Read all of these before starting either track. They build on each other — rea
 10. `docs/tutorials/openspec-spec-driven-development.md` — the spec workflow and how to use Copilot within it
 11. `docs/tutorials/tdd-with-vitest.md` — the red/green cycle, test setup, and the three tests you'll use as a starting point
 12. `docs/tutorials/copilot-agent-mode.md` — how to launch an agent session, anchor it to a spec, and catch drift before it costs you
+13. `docs/tutorials/copilot-cli-the-real-thing.md` — the mental model shift, the four slash commands, instructions files, and a practice run of the full spec-driven workflow
 
 ---
 
