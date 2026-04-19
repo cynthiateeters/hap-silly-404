@@ -8,3 +8,5 @@ reports/
 # Claude
 .claude/
 CLAUDE.md
+
+.vscode/settings.json
