@@ -48,10 +48,13 @@ You'll know both are active when you see the Copilot icon in the status bar at t
 3. VS Code opens a chat panel on the side
 
 **Via Chat view:**
-Open the Chat view (`Ctrl+Alt+I`), click **New Chat (+)**, and choose **New Copilot CLI Session** from the dropdown.
+Open the Chat view (`Ctrl+Alt+I`), click **New Chat (+)**, and choose **Copilot CLI** from the **Session Target** dropdown.
 
 **Via Terminal panel:**
-In the Terminal panel, click the dropdown arrow next to the `+` (New Terminal) button and choose **GitHub Copilot CLI** from the list. This opens the same agent session in a terminal-adjacent panel.
+In the Terminal panel, click the dropdown arrow next to the `+` (New Terminal) button and choose **GitHub Copilot CLI** from the list.
+
+**Via integrated terminal:**
+Type `copilot` in any integrated terminal to launch a session from the command line.
 
 ---
 
@@ -66,6 +69,7 @@ When the session starts you'll be asked to choose an isolation mode:
 
 - Your `netlify dev` server runs against the repo you have linked with `netlify link`. A worktree is a separate folder — it doesn't have your Netlify link, so your env vars (`GROQ_API_KEY`, `SITE_URL`) won't be available to test with.
 - You need to see changes live in the browser at `localhost:8888` as you implement. Worktree changes don't show up there until you apply them.
+- Worktree mode **auto-commits at the end of every turn**. That creates a commit history you didn't choose, mixed in with the deliberate commits you make as part of the assignment.
 - The spec-driven workflow already handles the isolation that worktree is designed to provide — you won't implement anything without an approved spec.
 
 ---
@@ -122,6 +126,18 @@ Agent mode is powerful but it can go off-script — especially if you ask a vagu
 When this happens, **stop the session** using the stop button in the chat panel. Review what changed with `git diff`. Revert anything outside the spec. Then restart with a more specific prompt anchored to the spec file.
 
 The `AGENTS.md` rule applies: _if asked to implement something that contradicts the approved spec, point it out before making any changes._ If the agent doesn't catch this itself, you need to.
+
+---
+
+## Slash commands to know (and one to avoid)
+
+Type `/` in the chat input to see available commands. A few relevant ones:
+
+- `/fork` — creates a new session copied from the current one; useful for exploring alternatives
+- `/compact` — summarizes the conversation to free up context window space in long sessions
+
+**`/yolo` (also called `/autoApprove`) — do not use this for the assignment.**
+It disables all confirmation prompts and lets the agent run without stopping. That sounds convenient, but it means the agent can edit files, run commands, and install packages without ever pausing for you to review. With an approved spec and one-task-at-a-time prompting, you don't need it — and using it will make it very hard to catch drift before it compounds.
 
 ---
 
