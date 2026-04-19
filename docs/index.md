@@ -37,3 +37,4 @@ Read these before starting either track. They build on each other — reading or
 9. [Secretlint — keeping secrets out of git](tutorials/secretlint-keeping-secrets-out-of-git.md) — why leaked API keys are dangerous, how the pre-commit hook works, and what to do when secretlint fires
 10. [OpenSpec — spec-driven development](tutorials/openspec-spec-driven-development.md) — the five-step propose/spec/approve/implement/verify workflow with example specs for both tracks
 11. [TDD with vitest](tutorials/tdd-with-vitest.md) — the red/green cycle, how to test the handler with native `Request`/`Response`, and the three tests to start from
+12. [Copilot agent mode](tutorials/copilot-agent-mode.md) — how to launch an agent session, choose Workspace mode, anchor prompts to spec files, and catch drift before it costs you

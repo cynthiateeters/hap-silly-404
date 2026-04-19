@@ -121,6 +121,7 @@ Every back-end feature must have tests covering at least the happy path and one 
 
 ## Spec-driven workflow
 
+- At the start of every session, check `specs/` for existing spec files. If one exists for the current task, read it before doing anything else.
 - If a user describes a feature and there is no spec file in `specs/`, stop and write the spec first. Say: "I don't have an approved spec for this. Should I write one?"
 - Never implement more than one task per response. Complete a task, stop, and wait for confirmation before moving to the next.
 - After completing a task, run `npm run check` and report the result. Do not mark a task complete if the check fails.

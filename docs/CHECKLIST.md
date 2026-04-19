@@ -46,10 +46,11 @@ updated: 2026-04-18
 - [ ] `docs/tutorials/secretlint-keeping-secrets-out-of-git.md`
 - [ ] `docs/tutorials/openspec-spec-driven-development.md`
 - [ ] `docs/tutorials/tdd-with-vitest.md`
+- [ ] `docs/tutorials/copilot-agent-mode.md`
 
 ## Track 1 — front-end feature
 
-- [ ] Feature idea proposed in Copilot Chat
+- [ ] Feature idea proposed in a Copilot agent session
 - [ ] Spec written by Copilot and reviewed by you
 - [ ] Spec saved as `specs/your-feature-name.md`
 - [ ] Spec approved before any code written
@@ -59,7 +60,7 @@ updated: 2026-04-18
 
 ## Track 2 — back-end security feature
 
-- [ ] Feature idea proposed in Copilot Chat
+- [ ] Feature idea proposed in a Copilot agent session
 - [ ] Spec written by Copilot and reviewed by you
 - [ ] Spec saved as `specs/your-feature-name.md`
 - [ ] Spec approved before any code written

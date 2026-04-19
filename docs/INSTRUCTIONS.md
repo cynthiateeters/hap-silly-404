@@ -139,18 +139,30 @@ Read all of these before starting either track. They build on each other — rea
 9. `docs/tutorials/secretlint-keeping-secrets-out-of-git.md` — how the pre-commit hook works and what to do when it fires
 10. `docs/tutorials/openspec-spec-driven-development.md` — the spec workflow and how to use Copilot within it
 11. `docs/tutorials/tdd-with-vitest.md` — the red/green cycle, test setup, and the three tests you'll use as a starting point
+12. `docs/tutorials/copilot-agent-mode.md` — how to launch an agent session, anchor it to a spec, and catch drift before it costs you
 
 ---
 
 ## Part 4 — Track 1: front-end feature
 
-1. Open Copilot Chat. Describe your feature idea in plain language. Ask Copilot to ask you clarifying questions before doing anything else.
+1. Open a Copilot agent session (see `docs/tutorials/copilot-agent-mode.md`). Use this opening prompt:
 
-2. Ask Copilot to write a spec. See `docs/tutorials/openspec-spec-driven-development.md` for what a complete spec looks like.
+   ```
+   Read AGENTS.md. I want to add [describe your feature idea].
+   Don't write any code yet — write a spec for this feature first.
+   ```
 
-3. Review the spec against `docs/reference/security-guardrails.md`. Edit it until it's right. Then save it as a file — `specs/your-feature-name.md` — and approve it explicitly in writing: "looks good, let's implement." Copilot reads this file at the start of each session, so it doesn't lose track of what you agreed to.
+2. Review the spec against `docs/reference/security-guardrails.md`. Edit it until it's right. Then save it as a file — `specs/your-feature-name.md` — and approve it explicitly in writing: "looks good, let's implement." The agent reads this file at the start of each session, so it doesn't lose context between sessions.
 
-4. Ask Copilot to implement against the approved spec. CSS, HTML, and client-side JavaScript are yours to redesign as needed. The security guardrails apply regardless of what you build.
+3. Start a new agent session anchored to the spec:
+
+   ```
+   Read AGENTS.md and specs/your-feature-name.md before doing anything.
+   The spec is approved. Implement only task 1 from the Tasks section.
+   Stop after task 1 and show me what you changed.
+   ```
+
+4. Confirm each task before moving to the next. CSS, HTML, and client-side JavaScript are yours to redesign as needed. The security guardrails apply regardless of what you build.
 
 5. Run `npm run check`. Fix anything it reports. The pre-commit hook runs this automatically on `git commit`, but running it manually first saves time.
 
@@ -158,9 +170,15 @@ Read all of these before starting either track. They build on each other — rea
 
 ## Part 5 — Track 2: back-end security feature
 
-1. Open Copilot Chat. Propose a security improvement to `insult.mjs`. Review the existing handler order in `AGENTS.md` before proposing — new checks should slot into the existing flow, not restructure it.
+1. Open a Copilot agent session. Use this opening prompt:
 
-2. Ask Copilot to write a spec. The spec must include a Tests section listing what each test covers. See `docs/tutorials/openspec-spec-driven-development.md` for an example.
+   ```
+   Read AGENTS.md. I want to add a security improvement to insult.mjs.
+   Review the handler order in AGENTS.md before proposing anything.
+   Don't write any code yet — write a spec first.
+   ```
+
+2. The spec must include a Tests section listing what each test covers. See `docs/tutorials/openspec-spec-driven-development.md` for an example.
 
 3. Review the spec against `docs/reference/security-guardrails.md`. Save it as `specs/your-feature-name.md` and approve it before any code is written.
 
