@@ -115,10 +115,10 @@ Before reading the tutorials or starting either track, get vitest running:
 3. Run vitest to confirm the setup:
 
    ```bash
-   npx vitest
+   npx vitest run
    ```
 
-   It should start and report zero tests found. That is correct — you haven't written any yet.
+   It should report zero tests found and exit cleanly. That is correct — you haven't written any yet. (Bare `npx vitest` enters watch mode and hangs; always use `vitest run` when you want it to exit.)
 
 4. Read `docs/tutorials/tdd-with-vitest.md` before writing any tests.
 

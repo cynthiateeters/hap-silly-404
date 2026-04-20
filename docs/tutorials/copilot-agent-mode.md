@@ -44,11 +44,11 @@ You'll know both are active when you see the Copilot icon in the status bar at t
 **Via Command Palette (most reliable):**
 
 1. Open the Command Palette: `Cmd+Shift+P` (Mac) or `Ctrl+Shift+P` (Windows/Linux)
-2. Type `Chat: New Copilot CLI` and select it
+2. Type `Chat: New Copilot CLI Session` and select it
 3. VS Code opens a chat panel on the side
 
 **Via Chat view:**
-Open the Chat view (`Ctrl+Alt+I`), click **New Chat (+)**, and choose **Copilot CLI** from the **Session Target** dropdown.
+Open the Chat view (`Ctrl+Alt+I` on Windows/Linux, `Ctrl+Cmd+I` on Mac), click **New Chat (+)**, and choose **Copilot CLI** from the **Session Target** dropdown.
 
 **Via Terminal panel:**
 In the Terminal panel, click the dropdown arrow next to the `+` (New Terminal) button and choose **GitHub Copilot CLI** from the list.
@@ -113,14 +113,6 @@ You can also type `@terminal` to ask specifically about shell output, or paste t
 
 ---
 
-## Fork a session to explore alternatives
-
-If you want to try a different approach without losing your current conversation, type `/fork` in the chat. VS Code creates a new session copied from the current one. You can explore the alternative in the fork and abandon it if it doesn't work, keeping the original intact.
-
-This is useful when the agent proposes an approach you're not sure about. Fork, let it try, and compare.
-
----
-
 ## What to do when the agent drifts
 
 Agent mode is powerful but it can go off-script — especially if you ask a vague question in the middle of an implementation. Signs of drift:
@@ -139,11 +131,11 @@ The `AGENTS.md` rule applies: _if asked to implement something that contradicts 
 
 Type `/` in the chat input to see available commands. A few relevant ones:
 
-- `/fork` — creates a new session copied from the current one; useful for exploring alternatives
 - `/compact` — summarizes the conversation to free up context window space in long sessions
+- `/diff` — shows every file change the agent has made in the current session; run this before every `git commit`
 
 **`/yolo` (also called `/autoApprove`) — do not use this for the assignment.**
-It disables all confirmation prompts and lets the agent run without stopping. That sounds convenient, but it means the agent can edit files, run commands, and install packages without ever pausing for you to review. With an approved spec and one-task-at-a-time prompting, you don't need it — and using it will make it very hard to catch drift before it compounds.
+It disables all confirmation prompts and lets the agent run without stopping. That sounds convenient, but it means the agent can edit files, run commands, and install packages without ever pausing for you to review. With an approved spec and one-task-at-a-time prompting, you don't need it — and using it will make it very hard to catch drift before it compounds. The name stands for "you only live once" — shorthand for "skip all the safety checks and just go."
 
 ---
 

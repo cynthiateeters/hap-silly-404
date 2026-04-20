@@ -94,31 +94,41 @@ The fix needed to close that hole in production while keeping local development 
 
 ### What changed
 
-The function now resolves `ALLOWED_ORIGIN` in two tiers:
+The function now resolves `allowedOrigin` in two tiers, inside a `getConfig()` helper:
 
 ```js
-const isLocalDev = process.env.NETLIFY_DEV === "true";
-const ALLOWED_ORIGIN = process.env.SITE_URL || (isLocalDev ? "http://localhost:8888" : undefined);
+function getConfig() {
+  const isLocalDev = process.env.NETLIFY_DEV === "true";
+  const allowedOrigin = process.env.SITE_URL || (isLocalDev ? "http://localhost:8888" : undefined);
 
-if (!ALLOWED_ORIGIN) {
-  console.error(
-    "SITE_URL is not set in production env. Insult function will return 500. " +
-      "Set SITE_URL in the Netlify dashboard (Site configuration → Environment variables).",
-  );
+  if (!allowedOrigin) {
+    console.error(
+      "SITE_URL is not set in production env. Insult function will return 500. " +
+        "Set SITE_URL in the Netlify dashboard (Site configuration → Environment variables).",
+    );
+  }
+  // ...
+  return { allowedOrigin, corsHeaders };
 }
+```
+
+The handler extracts both values at the top:
+
+```js
+const { allowedOrigin, corsHeaders } = getConfig();
 ```
 
 `NETLIFY_DEV` is injected by the Netlify CLI automatically whenever you run `netlify dev` on your local machine. A deployed function will never see it. So:
 
-- **Local dev:** `NETLIFY_DEV` is `"true"` → `ALLOWED_ORIGIN` defaults to `http://localhost:8888` → no configuration needed after cloning
-- **Production:** `NETLIFY_DEV` is not set → `ALLOWED_ORIGIN` comes from `SITE_URL` → if `SITE_URL` is missing, the function returns 500 and logs a clear error
+- **Local dev:** `NETLIFY_DEV` is `"true"` → `allowedOrigin` defaults to `http://localhost:8888` → no configuration needed after cloning
+- **Production:** `NETLIFY_DEV` is not set → `allowedOrigin` comes from `SITE_URL` → if `SITE_URL` is missing, the function returns 500 and logs a clear error
 
 That's the fail-closed design: missing configuration in production is a visible error, not a silent security bypass.
 
 The early-return at the top of the handler makes the production misconfiguration visible as a 500 before the function tries to do anything else:
 
 ```js
-if (!ALLOWED_ORIGIN) {
+if (!allowedOrigin) {
   return new Response(JSON.stringify({ error: "Server misconfigured." }), {
     status: 500,
     headers: { "Content-Type": "application/json" },
@@ -185,19 +195,19 @@ CORS headers tell the browser not to let other sites read the function's respons
 
 ### What changed
 
-Near the top of the handler, after the HTTP method check, a short block reads the `Origin` and `Referer` headers and rejects anything that doesn't match `ALLOWED_ORIGIN`:
+Near the top of the handler, after the HTTP method check, a short block reads the `Origin` and `Referer` headers and rejects anything that doesn't match `allowedOrigin`:
 
 ```js
 const origin = request.headers.get("origin");
 const referer = request.headers.get("referer");
 
 const sameOriginRequest =
-  (origin && origin === ALLOWED_ORIGIN) || (referer && referer.startsWith(ALLOWED_ORIGIN));
+  (origin && origin === allowedOrigin) || (referer && referer.startsWith(allowedOrigin));
 
 if (!sameOriginRequest) {
   return new Response(JSON.stringify({ error: "Forbidden." }), {
     status: 403,
-    headers: CORS_HEADERS,
+    headers: corsHeaders,
   });
 }
 ```
@@ -249,7 +259,7 @@ if (!insult) {
   console.warn("Groq response missing expected content shape.");
   return new Response(JSON.stringify({ insult: randomFallback(), source: "fallback" }), {
     status: 200,
-    headers: CORS_HEADERS,
+    headers: corsHeaders,
   });
 }
 ```
@@ -264,7 +274,7 @@ The functional behavior is identical to before hardening — the 404 page loads,
 
 - The browser won't execute injected scripts (CSP enforcing)
 - The function won't silently proxy Groq for the open internet (CORS + origin check)
-- A misconfigured production deploy fails loudly instead of silently (fail-closed ALLOWED_ORIGIN)
+- A misconfigured production deploy fails loudly instead of silently (fail-closed `allowedOrigin`)
 - Non-browser callers are rejected before a Groq call is made (M3)
 - The rate limit matches actual usage rather than being set high enough to rarely trigger (M2)
 - The browser won't be tricked into HTTP or prompted for unnecessary permissions (HSTS, Permissions-Policy)

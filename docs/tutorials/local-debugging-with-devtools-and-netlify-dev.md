@@ -173,11 +173,11 @@ Client-side JavaScript errors land here. Common entries for this app:
 
 Security and policy issues the browser surfaces:
 
-- **CSP violations** appear here with messages like `[Report Only] Refused to load the image ... because it violates ... img-src`. Each entry names the directive and the blocked resource.
+- **CSP violations** appear here with messages like `Refused to load the image ... because it violates ... img-src`. Each entry names the directive and the blocked resource. Under a temporary `Content-Security-Policy-Report-Only` deployment the same message is prefixed with `[Report Only]`.
 - Deprecated API warnings.
 - Cookie / SameSite issues.
 
-After enabling the CSP `Report-Only` header, the Issues tab is your main monitoring surface for the 24–48 hours before promoting to enforcing mode.
+The repo's current CSP is enforcing (`Content-Security-Policy` in `netlify.toml`), so violations block the resource. When you test a new directive by temporarily deploying `Content-Security-Policy-Report-Only`, the Issues tab is your main monitoring surface for the 24–48 hours before promoting to enforcing mode.
 
 ### Sources tab — setting a breakpoint
 
@@ -213,15 +213,15 @@ This is faster than adding `console.log` everywhere.
 
 ---
 
-### Problem 2 — CSP report-only violation
+### Problem 2 — CSP violation
 
-**What you see in DevTools:** Issues tab shows entries like `[Report Only] Refused to load the image 'https://example.com/foo.jpg' because it violates ... img-src`.
+**What you see in DevTools:** Issues tab shows entries like `Refused to load the image 'https://example.com/foo.jpg' because it violates ... img-src`. Under a temporary Report-Only deployment the message is prefixed with `[Report Only]` and the resource still loads.
 
 **How to diagnose:**
 
 1. Read the directive name — that tells you which source list to widen.
 2. Decide if the blocked resource is intentional. If yes, widen the directive in `netlify.toml`. If no, fix the code loading it.
-3. While in Report-Only mode, the resource still loads — this is a warning, not a block. Once you promote to enforcing, it will be blocked.
+3. In the repo's enforcing CSP, the browser blocks the resource outright. If you're testing a new directive in Report-Only mode, the resource still loads and the message is only a warning — until you promote to enforcing.
 4. Hard-reload (`Cmd+Shift+R`) after every `netlify.toml` edit. Headers are aggressively cached.
 
 ---
@@ -267,7 +267,7 @@ For a deeper explanation of why this happens, see `[[cors-is-hard-and-everyone-h
 
 **How to diagnose:**
 
-1. Network → request row → Headers. Check **Origin** and **Referer** in the request headers — one must match `ALLOWED_ORIGIN`.
+1. Network → request row → Headers. Check **Origin** and **Referer** in the request headers — one must match `allowedOrigin`.
 2. Most common cause: calling the function directly with curl without setting an Origin header:
 
    ```bash

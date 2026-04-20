@@ -63,7 +63,7 @@ docs/                       user-facing tutorials — read these for context
 specs/                      approved feature specs — read before implementing any feature
 ```
 
-The CSP in `netlify.toml` is in `Report-Only` mode — violations appear in DevTools → Issues but do not block. Do not promote it to enforcing without checking for violations first.
+The CSP in `netlify.toml` is enforcing (`Content-Security-Policy`, not `Content-Security-Policy-Report-Only`) — violations block the resource from loading and appear in DevTools → Issues. If you add a new directive, consider testing it with a temporary `Content-Security-Policy-Report-Only` header first before promoting to enforcing; see `docs/tutorials/hardening-walkthrough-applying-each-audit-fix.md`.
 
 ---
 
@@ -105,7 +105,7 @@ Tests use vitest and live in `tests/`. The handler accepts standard Web API `Req
 ```js
 const req = new Request("http://localhost/.netlify/functions/insult");
 const res = await handler(req);
-expect(res.status).toBe(405); // no method = GET default, but no origin = 403
+expect(res.status).toBe(403); // no method = GET default; no origin header → origin check returns 403
 ```
 
 Set env vars before calling the handler to test different configurations:

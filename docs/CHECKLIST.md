@@ -31,7 +31,7 @@ updated: 2026-04-18
 - [ ] Add `"test": "vitest run"` to `package.json` scripts
 - [ ] Add `"test:watch": "vitest"` to `package.json` scripts
 - [ ] Confirm `tests/` and `specs/` folders exist (both ship with the repo)
-- [ ] Run `npx vitest` — confirm it starts (zero tests is fine)
+- [ ] Run `npx vitest run` — confirm it exits cleanly (zero tests is fine; bare `npx vitest` enters watch mode and hangs)
 
 ## Read tutorials (check off as you read)
 
@@ -47,6 +47,7 @@ updated: 2026-04-18
 - [ ] `docs/tutorials/openspec-spec-driven-development.md`
 - [ ] `docs/tutorials/tdd-with-vitest.md`
 - [ ] `docs/tutorials/copilot-agent-mode.md`
+- [ ] `docs/tutorials/copilot-cli-the-real-thing.md`
 
 ## Track 1 — front-end feature
 

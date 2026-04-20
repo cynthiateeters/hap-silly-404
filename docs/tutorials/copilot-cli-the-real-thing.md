@@ -115,7 +115,7 @@ When you start a CLI session from the VS Code Chat panel, it asks you to choose 
 
 **Choose Workspace.**
 
-After choosing Workspace, set the permission level to **Bypass Approvals**. This lets the agent run `npm` commands — `npm test`, `npm run check`, `npm run dev` — without you clicking a confirmation button on every one. Without it, a three-step task turns into twenty button clicks.
+After choosing Workspace, set the permission level to **auto-approve**. This lets the agent run `npm` commands — `npm test`, `npm run check`, `npm run dev` — without you clicking a confirmation button on every one. Without it, a three-step task turns into twenty button clicks. If you can't find the toggle in the UI, type `/yolo` (or its alias `/autoApprove`) at the start of your session — it enables the same permission level from the command line.
 
 ---
 
@@ -151,7 +151,7 @@ Revokes any permissions you've granted the agent during the session — like fil
 
 This is the part of Copilot CLI that most people discover last. It's the most important part for this assignment.
 
-Copilot CLI reads **instructions files** at the start of every session. The main one is `.github/copilot-instructions.md` — a markdown file that tells the agent how to behave in this project: what conventions to follow, what rules to never break, what order to do things in.
+Copilot CLI reads **instructions files** at the start of every session. The main one is `.github/copilot-instructions.md` — a markdown file that tells the agent how to behave in this project: what conventions to follow, what rules to never break, what order to do things in. This repo uses the interchangeable `AGENTS.md` convention instead — Copilot CLI reads either name, so there is no `.github/copilot-instructions.md` file here and you won't find one if you search.
 
 You already have one. It's called `AGENTS.md`.
 
@@ -163,7 +163,7 @@ This is why saving your spec as a file in `specs/` matters so much. The spec is 
 
 ## The spec-driven workflow is your guardrail
 
-Workspace mode with Bypass Approvals means the agent can move fast. That is genuinely useful and genuinely dangerous. An unsupervised agent with broad permissions and a vague prompt will build things you didn't ask for, restructure things you didn't intend to touch, and present you with a `git diff` that takes an hour to understand.
+Workspace mode with auto-approve permissions means the agent can move fast. That is genuinely useful and genuinely dangerous. An unsupervised agent with broad permissions and a vague prompt will build things you didn't ask for, restructure things you didn't intend to touch, and present you with a `git diff` that takes an hour to understand.
 
 The spec-driven workflow exists precisely for this. You control the agent by controlling what it's allowed to build.
 
@@ -192,7 +192,7 @@ After you confirm task 1 is correct, you say "looks good, continue with task 2."
 
 Here's the full workflow in one concrete pass — not a feature you'll submit, just practice:
 
-1. Start a Copilot CLI session in Workspace mode with Bypass Approvals
+1. Start a Copilot CLI session in Workspace mode with auto-approve
 2. Paste this prompt:
    ```
    Read AGENTS.md. I want to add a "copy roast to clipboard" button to 404.html.
