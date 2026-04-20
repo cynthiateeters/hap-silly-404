@@ -85,19 +85,14 @@ When the session starts you'll be asked to choose an isolation mode:
 Don't just describe the feature and say "go." Give the agent two things to read first:
 
 ```
-Read AGENTS.md and specs/your-feature-name.md before doing anything.
+Read AGENTS.md and openspec/changes/<your-feature-slug>/tasks.md before doing anything.
 The spec is approved. Implement only task 1 from the Tasks section.
 Stop after task 1 and show me what you changed.
 ```
 
-If the spec doesn't exist yet, the opening prompt is different:
+If the artifacts don't exist yet, run the propose loop first — either `execute ./prompts/homepage-404-button.md` (swapping the slug) or `propose <your-feature-slug>` if the `AGENTS.md` rule is in place. Then validate before opening an implementation session.
 
-```
-Read AGENTS.md. I want to add [describe your feature].
-Don't write any code yet — write a spec for this feature first.
-```
-
-This matches the `AGENTS.md` rule: _if no spec file exists, write the spec first and wait for approval._
+This matches the `AGENTS.md` rule: _run `propose <slug>` and validate before any implementation._
 
 ---
 
@@ -107,7 +102,7 @@ Type `#` in the chat input to attach a file as context. Use this when you want t
 
 - `#404.html` — attach the 404 page when discussing front-end changes
 - `#netlify/functions/insult.mjs` — attach the function when working on Track 2
-- `#specs/your-feature-name.md` — pin the spec so the agent doesn't drift from it
+- `#openspec/changes/<your-feature-slug>/tasks.md` — pin the task list so the agent doesn't drift from it
 
 You can also type `@terminal` to ask specifically about shell output, or paste terminal output directly into the chat.
 
@@ -154,12 +149,12 @@ These steps are in the checklist (`docs/CHECKLIST.md`) so you don't have to reme
 
 ## Session length and the spec file
 
-Agent sessions don't have memory across restarts. The spec file in `specs/` is your continuity — it's what lets you close a session, come back the next day, and pick up where you left off. This is why the workflow insists on saving the spec as a file before starting implementation.
+Agent sessions don't have memory across restarts. The artifacts in `openspec/changes/<your-feature-slug>/` are your continuity — they're what lets you close a session, come back the next day, and pick up where you left off. This is why the workflow insists on running `propose` and validating before starting implementation.
 
-At the start of every new session, anchor to the spec:
+At the start of every new session, anchor to the artifacts:
 
 ```
-Read AGENTS.md and specs/your-feature-name.md.
+Read AGENTS.md and openspec/changes/<your-feature-slug>/tasks.md.
 We left off after task 2. Implement task 3 next.
 ```
 

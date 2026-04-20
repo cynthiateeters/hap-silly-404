@@ -72,10 +72,12 @@ Fork to your own GitHub account. This is your working copy.
   - `SITE_URL` — your Netlify site URL (e.g. `https://your-site-name.netlify.app`). If you don't know the URL yet, enter a placeholder — you can update it after the first deploy when Netlify assigns the URL.
 - Then click **Deploy**. Adding the variables at this step is easier than finding the settings page later.
 
-**4. Install the Netlify CLI**
+**4. Install the Netlify CLI and OpenSpec CLI**
+
+Both tools are used in the assignment. OpenSpec requires Node 20.19 or newer — check with `node --version` first.
 
 ```bash
-npm install -g netlify-cli
+npm install -g netlify-cli @fission-ai/openspec
 ```
 
 ---
@@ -127,7 +129,7 @@ Once everything is working, open `docs/INSTRUCTIONS.md` to begin the assignment.
 
 ## Tutorials and assignment docs
 
-The `docs/` folder contains a full assignment structure with 11 tutorials, reference cards, and step-by-step instructions. See [`docs/index.md`](docs/index.md) for the complete listing.
+The `docs/` folder contains a full assignment structure with 13 tutorials, reference cards, and step-by-step instructions. See [`docs/index.md`](docs/index.md) for the complete listing.
 
 Tutorials build on each other — reading order matters. The short version:
 
@@ -140,8 +142,10 @@ Tutorials build on each other — reading order matters. The short version:
 7. [CSP for front-end features](docs/tutorials/csp-for-front-end-features.md) — what the CSP blocks and what it means for new front-end code
 8. [Graceful degradation — the fallback pattern](docs/tutorials/graceful-degradation-fallback-pattern.md) — the four fallback layers in `insult.mjs`
 9. [Secretlint — keeping secrets out of git](docs/tutorials/secretlint-keeping-secrets-out-of-git.md) — how the pre-commit hook works and what to do when it fires
-10. [OpenSpec — spec-driven development](docs/tutorials/openspec-spec-driven-development.md) — the propose/spec/approve/implement/verify workflow
+10. [OpenSpec — spec-driven development](docs/tutorials/openspec-spec-driven-development.md) — the propose/validate/implement/archive workflow
 11. [TDD with vitest](docs/tutorials/tdd-with-vitest.md) — the red/green cycle and testing the handler with native `Request`/`Response`
+12. [Copilot CLI — the real thing](docs/tutorials/copilot-cli-the-real-thing.md) — workspace mode, anchor prompts, and the spec-driven loop
+13. [Copilot agent mode](docs/tutorials/copilot-agent-mode.md) — agentic sessions in VS Code, reference files, and preventing drift
 
 ---
 

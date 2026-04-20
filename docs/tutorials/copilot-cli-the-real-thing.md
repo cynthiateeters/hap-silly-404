@@ -157,7 +157,7 @@ You already have one. It's called `AGENTS.md`.
 
 When you run a CLI session in this repo, the agent reads `AGENTS.md` before doing anything else. Every hard security rule in that file — "never set `Access-Control-Allow-Origin: *`", "never use `innerHTML` for API responses" — is in the agent's context before your first message arrives. You don't have to restate them. The file does it for you.
 
-This is why saving your spec as a file in `specs/` matters so much. The spec is an instructions file for this feature. When you start a new session tomorrow, or after a `/compact` summarizes your history, the spec is still there. The agent reads it fresh. The contract between you and the agent persists across sessions because it's a file, not a memory.
+This is why the openspec artifacts live in `openspec/changes/<your-feature-slug>/` as committed files. The proposal, design, spec, and task list are instructions files for this feature. When you start a new session tomorrow, or after a `/compact` summarizes your history, those files are still there. The agent reads them fresh. The contract between you and the agent persists across sessions because it's a file, not a memory.
 
 ---
 
@@ -172,7 +172,7 @@ The rule is simple: **no implementation until there is an approved spec file.**
 The anchor prompt that makes this work — paste this at the start of every implementation session:
 
 ```
-Read AGENTS.md and specs/your-feature-name.md before doing anything.
+Read AGENTS.md and openspec/changes/<your-feature-slug>/tasks.md before doing anything.
 The spec is approved. Implement only task 1 from the Tasks section.
 Stop after task 1 and show me what you changed.
 ```
@@ -190,28 +190,36 @@ After you confirm task 1 is correct, you say "looks good, continue with task 2."
 
 ## Try it: a spec-driven session from scratch
 
-Here's the full workflow in one concrete pass — not a feature you'll submit, just practice:
+Here's the full workflow in one concrete pass — not a feature you'll submit, just practice. The feature: a "copy roast to clipboard" button on `404.html`.
 
-1. Start a Copilot CLI session in Workspace mode with auto-approve
-2. Paste this prompt:
+1. Start a Copilot CLI session in Workspace mode with auto-approve.
+2. Run the scaffold command:
+   ```bash
+   openspec new change clipboard-button
    ```
-   Read AGENTS.md. I want to add a "copy roast to clipboard" button to 404.html.
-   Don't write any code yet — write a spec for this feature first.
-   Use the five-section format from docs/tutorials/openspec-spec-driven-development.md.
+3. In the Copilot CLI session, run the propose loop:
+   ```bash
+   execute ./prompts/homepage-404-button.md
    ```
-3. Read the spec. Check it against `docs/reference/security-guardrails.md`. Edit anything that's wrong.
-4. Save it as `specs/clipboard-button.md`.
-5. Reply: "Spec approved. Read AGENTS.md and specs/clipboard-button.md. Implement task 1 only. Stop and show me what changed."
-6. When it stops, run `/diff`. Check every changed file.
-7. Run `npm run check`. If it fails, tell the agent what the output says and ask it to fix it.
-8. Confirm, then continue to task 2.
+   Then adapt the prompt on the fly: when the agent asks for context, describe the clipboard button instead. Or write a `prompts/clipboard-button.md` with the slug swapped — that's exactly how the `prompts/` folder is meant to grow.
+4. Read each artifact as it's written. Check `openspec/changes/clipboard-button/proposal.md` and `specs/<cap>/spec.md` against `docs/reference/security-guardrails.md`. Edit anything wrong.
+5. Run `openspec validate clipboard-button`. Fix any errors.
+6. Start a new Copilot CLI session and anchor to the artifacts:
+   ```
+   Read AGENTS.md and openspec/changes/clipboard-button/tasks.md before doing anything.
+   The spec is approved. Implement only task 1 from the Tasks section.
+   Stop after task 1 and show me what you changed.
+   ```
+7. When it stops, run `/diff`. Check every changed file.
+8. Run `npm run check`. If it fails, tell the agent what the output says and ask it to fix it.
+9. Confirm, then continue to task 2.
 
-You just did spec-driven TDD with a real agentic CLI. That is the entire assignment workflow, practiced on a feature that doesn't count.
+You just ran the full propose → validate → apply loop with a real agentic CLI. That is the entire assignment workflow, practiced on a feature that doesn't count.
 
 ---
 
 ## The three things to remember
 
 1. **The CLI is an agent, not a chat.** It reads files, runs commands, and loops. Treat it like a junior developer who needs a spec and a task list, not a search engine you ask questions.
-2. **The spec file is the contract.** Instructions in chat disappear after a `/compact`. A file in `specs/` doesn't. Write the spec first, save it, then implement.
+2. **The artifacts are the contract.** Instructions in chat disappear after a `/compact`. The files in `openspec/changes/<slug>/` don't. Run `propose`, validate, then implement — always in that order.
 3. **`/diff` before every commit.** The agent will touch things you didn't ask it to. That's not always bad — but you need to know. Read the diff. Own what goes into git.

@@ -15,7 +15,9 @@ updated: 2026-04-18
 - [ ] Netlify site created
 - [ ] `GROQ_API_KEY` added to Netlify dashboard environment variables
 - [ ] `SITE_URL` added to Netlify dashboard environment variables
+- [ ] Node 20.19+ confirmed (`node --version`)
 - [ ] Netlify CLI installed (`npm install -g netlify-cli`)
+- [ ] OpenSpec CLI installed (`npm install -g @fission-ai/openspec@latest`)
 
 ## Part 1 — Clone and verify locally
 
@@ -25,12 +27,18 @@ updated: 2026-04-18
 - [ ] DevTools → Network → `insult` request shows `"source": "groq"`
 - [ ] Read `AGENTS.md`
 
-## Vitest and specs
+## OpenSpec CLI
+
+- [ ] `openspec --version` prints a version number
+- [ ] `openspec init --tools none` run in the repo
+- [ ] `openspec/specs/` and `openspec/changes/` folders exist
+
+## Vitest
 
 - [ ] Run `npm install --save-dev vitest`
 - [ ] Add `"test": "vitest run"` to `package.json` scripts
 - [ ] Add `"test:watch": "vitest"` to `package.json` scripts
-- [ ] Confirm `tests/` and `specs/` folders exist (both ship with the repo)
+- [ ] `tests/` folder exists
 - [ ] Run `npx vitest run` — confirm it exits cleanly (zero tests is fine; bare `npx vitest` enters watch mode and hangs)
 
 ## Read tutorials (check off as you read)
@@ -49,24 +57,33 @@ updated: 2026-04-18
 - [ ] `docs/tutorials/copilot-agent-mode.md`
 - [ ] `docs/tutorials/copilot-cli-the-real-thing.md`
 
-## Track 1 — front-end feature
+## Part 4A — PoC dry run (everyone)
 
-- [ ] Feature idea proposed in a Copilot agent session
-- [ ] Spec written by Copilot and reviewed by you
-- [ ] Spec saved as `specs/your-feature-name.md`
-- [ ] Spec approved before any code written
-- [ ] Feature implemented
+- [ ] `openspec new change homepage-404-button` run
+- [ ] `execute ./prompts/homepage-404-button.md` run in Copilot CLI
+- [ ] Four artifacts present under `openspec/changes/homepage-404-button/`
+- [ ] `openspec validate homepage-404-button` passes
+- [ ] Artifacts reviewed; NO implementation started (the artifacts are the deliverable for 4A)
+
+## Track 1 — front-end feature (Part 4B)
+
+- [ ] `openspec new change <your-feature-slug>` run
+- [ ] `propose <your-feature-slug>` run in Copilot CLI (AGENTS.md rule)
+- [ ] Artifacts reviewed and edited
+- [ ] `openspec validate <your-feature-slug>` passes
+- [ ] `apply <your-feature-slug>` — one task at a time, committed between each
+- [ ] `openspec archive <your-feature-slug> --yes` run
 - [ ] `npm run check` passes
 - [ ] Any permanent constraints added to `AGENTS.md`
 
 ## Track 2 — back-end security feature
 
-- [ ] Feature idea proposed in a Copilot agent session
-- [ ] Spec written by Copilot and reviewed by you
-- [ ] Spec saved as `specs/your-feature-name.md`
-- [ ] Spec approved before any code written
-- [ ] Tests written before implementation (TDD)
-- [ ] Feature implemented
+- [ ] `openspec new change <your-security-feature-slug>` run
+- [ ] `propose <your-security-feature-slug>` run; scenarios verified as testable
+- [ ] `openspec validate <your-security-feature-slug>` passes
+- [ ] Tests written before implementation (TDD) — red-first, green after
+- [ ] `apply <your-security-feature-slug>` — one task at a time
+- [ ] `openspec archive <your-security-feature-slug> --yes` run
 - [ ] `npm test` passes
 - [ ] `npm run check` passes
 - [ ] Any permanent constraints added to `AGENTS.md`

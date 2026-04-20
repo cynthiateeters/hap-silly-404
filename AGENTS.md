@@ -20,7 +20,7 @@ user complete two tracks:
 
 Both tracks follow a spec-driven workflow: propose → spec → implement → verify. Do not write code before the feature is specced.
 
-Specs live in `specs/` as persistent markdown files. Before implementing anything, check for a spec file. If one exists, read it before doing anything else. If none exists, write the spec first and wait for approval.
+Specs live under `openspec/changes/<change-name>/` as a four-artifact set (`proposal.md`, `design.md`, `tasks.md`, `specs/<capability>/spec.md`) produced by the OpenSpec CLI. Before implementing anything, check for artifacts in `openspec/changes/`. If artifacts for the current task exist, read them before doing anything else. If none exist, propose first and wait for approval.
 
 ---
 
@@ -60,7 +60,9 @@ js/404.mjs                  client JS: pose picker, fetch, DOM updates
 netlify/functions/insult.mjs  serverless function: Groq call, CORS, rate limit
 netlify.toml                redirects, security headers, functions config
 docs/                       user-facing tutorials — read these for context
-specs/                      approved feature specs — read before implementing any feature
+openspec/changes/           in-progress OpenSpec changes (propose/apply artifacts)
+openspec/changes/archive/   archived, completed changes — durable audit trail
+openspec/specs/             promoted capability specs (written by `openspec archive`)
 ```
 
 The CSP in `netlify.toml` is enforcing (`Content-Security-Policy`, not `Content-Security-Policy-Report-Only`) — violations block the resource from loading and appear in DevTools → Issues. If you add a new directive, consider testing it with a temporary `Content-Security-Policy-Report-Only` header first before promoting to enforcing; see `docs/tutorials/hardening-walkthrough-applying-each-audit-fix.md`.
@@ -121,11 +123,27 @@ Every back-end feature must have tests covering at least the happy path and one 
 
 ## Spec-driven workflow
 
-- At the start of every session, check `specs/` for existing spec files. If one exists for the current task, read it before doing anything else.
-- If a user describes a feature and there is no spec file in `specs/`, stop and write the spec first. Say: "I don't have an approved spec for this. Should I write one?"
+- At the start of every session, check `openspec/changes/` for in-progress changes. If a change is active for the current task, read its artifacts (`proposal.md`, `design.md`, `tasks.md`, `specs/<capability>/spec.md`) before doing anything else.
+- If a user describes a feature and there is no matching change folder under `openspec/changes/`, stop and propose first. Say: "I don't have an approved proposal for this. Should I run the propose workflow?"
 - Never implement more than one task per response. Complete a task, stop, and wait for confirmation before moving to the next.
 - After completing a task, run `npm run check` and report the result. Do not mark a task complete if the check fails.
 - If asked to implement something that contradicts the approved spec, point it out before making any changes.
+
+## OpenSpec workflow
+
+When the user says **"propose `<change-name>`"**, follow the algorithm in
+`docs/reference/opsx-propose-algorithm.md`.
+
+When the user says **"apply `<change-name>`"**, follow the algorithm in
+`docs/reference/opsx-apply-algorithm.md`.
+
+Before running either, check that `openspec/changes/<change-name>/.openspec.yaml`
+exists. If not, run `openspec new change <change-name>` first. If the folder
+already exists and is non-empty, stop and ask the user whether to resume or pick
+a new name.
+
+Never write code outside `openspec/changes/<change-name>/` during a `propose` step.
+Implementation happens in a separate `apply` step.
 
 ## AGENTS.md is a living document
 

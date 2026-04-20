@@ -93,9 +93,43 @@ Everything in this part is setup and verification. Do not start the tutorials or
 
 ---
 
-## Part 2 — Add vitest
+## Part 2 — Tooling setup
 
-Before reading the tutorials or starting either track, get vitest running:
+Before reading the tutorials or starting either track, you need two tools installed and verified: the OpenSpec CLI (drives the spec workflow) and vitest (runs the Track 2 tests). OpenSpec requires Node 20.19 or newer — check first:
+
+```bash
+node --version
+```
+
+If your Node is older, upgrade before continuing.
+
+### Part 2a — OpenSpec CLI
+
+1. Install OpenSpec globally:
+
+   ```bash
+   npm install -g @fission-ai/openspec@latest
+   ```
+
+2. Verify it installed:
+
+   ```bash
+   openspec --version
+   ```
+
+3. Initialize OpenSpec in this repo. The `--tools none` flag skips any tool-specific integrations (we're using Copilot CLI, not Claude Code or Cursor):
+
+   ```bash
+   openspec init --tools none
+   ```
+
+   This creates three folders: `openspec/specs/` (capability specs promoted by `openspec archive`), `openspec/changes/` (in-progress changes you'll add in Parts 4 and 5), and a small `openspec/config.yaml`. It does NOT create any `.claude/`, `.cursor/`, or `.github/prompts/` folder — Copilot CLI is tool-agnostic, so you drive the workflow via the prompts and rules in Parts 4 and 5 instead.
+
+   The `openspec/` folder is not committed to the starter repo — you just created it in your fork. Every subsequent commit that adds a change will include the relevant `openspec/changes/<name>/` artifacts alongside your code. Those artifact files are the durable evidence that your spec existed before your implementation.
+
+**Why this matters for grading:** in this workflow, `openspec/changes/` and `openspec/changes/archive/` folders in your pushed PR ARE the evidence that the spec existed before the code. This replaces any reliance on private chat history.
+
+### Part 2b — vitest
 
 1. Install vitest as a dev dependency:
 
@@ -110,7 +144,7 @@ Before reading the tutorials or starting either track, get vitest running:
    "test:watch": "vitest"
    ```
 
-   Both `tests/` and `specs/` folders are already in the repo. `tests/` is where your vitest files go. `specs/` is where your approved spec files go, one per feature.
+   The `tests/` folder is already in the repo — that's where your vitest files go.
 
 3. Run vitest to confirm the setup:
 
@@ -146,48 +180,153 @@ Read all of these before starting either track. They build on each other — rea
 
 ## Part 4 — Track 1: front-end feature
 
-1. Open a Copilot agent session (see `docs/tutorials/copilot-agent-mode.md`). Use this opening prompt:
+You will run the OpenSpec workflow twice here:
+
+- **Part 4A** — a PoC dry run (`homepage-404-button`), same feature for everyone. Purpose: prove the workflow before you trust it with your real feature.
+- **Part 4B** — your real Track 1 feature, using the `AGENTS.md` rule instead of a paste-in prompt.
+
+A full finished example lives at `docs/examples/openspec-dark-mode-toggle/` — open those four files before starting if you want to see what a completed change looks like.
+
+### Part 4A — dry run: `homepage-404-button` (everyone)
+
+The feature: a button on `index.html` that links to a known-bad URL so a visitor can click through to the 404 roast without typing a broken path. Scope is deliberately tiny — label text, target URL, whether it opens in a new tab, `aria-label`. The point is that every student's result should land in roughly the same place. That convergence proves the workflow.
+
+Workflow:
+
+1. In one terminal, start the dev server and leave it running:
+
+   ```bash
+   npm run dev
+   ```
+
+2. In another terminal, scaffold the change folder:
+
+   ```bash
+   openspec new change homepage-404-button
+   ```
+
+3. Start a Copilot CLI session in the repo. Execute the prompt file:
+
+   ```bash
+   execute ./prompts/homepage-404-button.md
+   ```
+
+   Open `prompts/homepage-404-button.md` and read it — that file **is** the prompt. This is the point: a prompt can live in version control just like code. You'll use it once here, then use the `AGENTS.md` rule shortcut for every feature after this.
+
+4. Answer any clarifying questions the agent asks. Then read each artifact as it's written. Check each one:
+   - `openspec/changes/homepage-404-button/proposal.md` — does it match what you want?
+   - `openspec/changes/homepage-404-button/specs/<cap>/spec.md` — are the BDD scenarios testable?
+   - `openspec/changes/homepage-404-button/design.md` — are the Non-Goals reasonable?
+   - `openspec/changes/homepage-404-button/tasks.md` — would you be able to check these off one at a time?
+
+5. Run validation manually to confirm:
+
+   ```bash
+   openspec validate homepage-404-button
+   ```
+
+6. **Stop here.** The PoC is the artifact set, not a live button. Do not `apply` yet. The purpose of 4A is to verify the workflow before you trust it with your real feature. Keep the `openspec/changes/homepage-404-button/` folder around — it's part of your PR evidence.
+
+### Part 4B — your Track 1 feature
+
+Pick a frontend feature that's NOT `homepage-404-button` and NOT the `dark-mode-toggle` example. Ideas: clipboard share button, roast history for the session, keyboard-only refresh, fun hover animation.
+
+Workflow — shorter, because you've seen it once:
+
+1. Scaffold:
+
+   ```bash
+   openspec new change <your-feature-slug>
+   ```
+
+   The slug is kebab-case (e.g., `clipboard-share-button`).
+
+2. In Copilot CLI, say:
 
    ```
-   Read AGENTS.md. I want to add [describe your feature idea].
-   Don't write any code yet — write a spec for this feature first.
+   propose <your-feature-slug>
    ```
 
-2. Review the spec against `docs/reference/security-guardrails.md`. Edit it until it's right. Then save it as a file — `specs/your-feature-name.md` — and approve it explicitly in writing: "looks good, let's implement." The agent reads this file at the start of each session, so it doesn't lose context between sessions.
+   The `AGENTS.md` rule directs the agent to `docs/reference/opsx-propose-algorithm.md`, which drives the same loop you ran in 4A.
 
-3. Start a new agent session anchored to the spec:
+3. Review the artifacts. Edit any that are wrong — the agent proposed them, you own them. Commit the artifacts (they belong in the same PR as your code).
+
+4. In Copilot CLI, say:
 
    ```
-   Read AGENTS.md and specs/your-feature-name.md before doing anything.
-   The spec is approved. Implement only task 1 from the Tasks section.
-   Stop after task 1 and show me what you changed.
+   apply <your-feature-slug>
    ```
 
-4. Confirm each task before moving to the next. CSS, HTML, and client-side JavaScript are yours to redesign as needed. The security guardrails apply regardless of what you build.
+   Follow the algorithm in `docs/reference/opsx-apply-algorithm.md`: one task at a time, review and commit between each.
 
-5. Run `npm run check`. Fix anything it reports. The pre-commit hook runs this automatically on `git commit`, but running it manually first saves time.
+5. When all tasks are checked and you're satisfied, archive the change:
+
+   ```bash
+   openspec archive <your-feature-slug> --yes
+   ```
+
+   This moves the change to `openspec/changes/archive/<YYYY-MM-DD>-<slug>/` and promotes the spec into `openspec/specs/`. Commit the archive move — it's the durable audit trail.
+
+6. Run `npm run check`. Fix anything it reports.
 
 ---
 
 ## Part 5 — Track 2: back-end security feature
 
-1. Open a Copilot agent session. Use this opening prompt:
+Same `propose` + `apply` mechanism as Part 4B. The new thing in Track 2 is the BDD scenarios in `spec.md` — you turn each scenario into a vitest test, and you write those tests FIRST, before the implementation.
+
+Examples of Track 2 features: prompt injection prevention via path sanitization, structured error logging, input validation, response caching with fallback. The feature must not weaken any existing security check — see `docs/reference/security-guardrails.md` and the handler order in `AGENTS.md`.
+
+Workflow:
+
+1. Scaffold:
+
+   ```bash
+   openspec new change <your-security-feature-slug>
+   ```
+
+2. In Copilot CLI, say:
 
    ```
-   Read AGENTS.md. I want to add a security improvement to insult.mjs.
-   Review the handler order in AGENTS.md before proposing anything.
-   Don't write any code yet — write a spec first.
+   propose <your-security-feature-slug>
    ```
 
-2. The spec must include a Tests section listing what each test covers. See `docs/tutorials/openspec-spec-driven-development.md` for an example.
+   When the agent asks clarifying questions, be explicit that it must:
+   - Review the handler order in `AGENTS.md` and state which step the new logic slots into.
+   - Produce BDD scenarios that are testable with vitest — each scenario should map to one `it()` block.
 
-3. Review the spec against `docs/reference/security-guardrails.md`. Save it as `specs/your-feature-name.md` and approve it before any code is written.
+3. Review the artifacts carefully. Confirm:
+   - Every scenario in `specs/<cap>/spec.md` is testable with vitest.
+   - `tasks.md` has a task for writing tests before the implementation task.
+   - `design.md` explicitly names the security property being preserved (e.g., "origin check remains the first gate").
 
-4. Write the tests first. Create a test file in `tests/`. Run `npm run test:watch` and confirm the tests fail (red) before you write the implementation.
+4. Commit the artifacts. Then in Copilot CLI, say:
 
-5. Implement the feature against the spec. Watch the tests go green.
+   ```
+   apply <your-security-feature-slug>
+   ```
 
-6. Run `npm test` and `npm run check`. Both must pass before you consider the feature complete.
+   The `AGENTS.md` rule directs the agent to `docs/reference/opsx-apply-algorithm.md`, which requires a red-first test cycle for Track 2. For each task:
+   - If it's a test task, the agent writes the test from the scenario. Run `npm run test:watch` and confirm red.
+   - If it's an implementation task, the agent writes the minimum code to make the previously-red test pass. Watch it go green.
+   - The agent checks the box in `tasks.md` only after tests and `npm run check` pass.
+   - The agent commits one task at a time and stops for your review.
+
+5. When all tasks are checked:
+
+   ```bash
+   npm test && npm run check
+   ```
+
+   Both must be green.
+
+6. Archive:
+
+   ```bash
+   openspec archive <your-security-feature-slug> --yes
+   ```
+
+   Commit the archive move.
 
 ---
 
@@ -225,4 +364,5 @@ You don't need to add a rule after every commit. Add one when you catch yourself
 - Track 2 feature with passing vitest tests
 - `npm run check` passes (no lint, format, or secretlint errors)
 - `npm test` passes
-- Your spec existed before your implementation — Copilot Chat history is sufficient evidence
+- `openspec/changes/homepage-404-button/` (PoC artifacts from Part 4A) committed in your PR
+- `openspec/changes/archive/<date>-<track-1-slug>/` and `openspec/changes/archive/<date>-<track-2-slug>/` present, showing your spec existed before your implementation
