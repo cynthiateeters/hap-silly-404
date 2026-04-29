@@ -8,8 +8,9 @@
     "lint": "eslint .",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
-    "secretlint": "secretlint \"**/*\"",
-    "check": "npm run lint && npm run format:check && npm run secretlint",
+  "secretlint": "secretlint \"**/*\"",
+  "check": "npm run lint && npm run format:check && npm run secretlint",
+  "test": "vitest run",
     "dev": "NETLIFY_DEV=true netlify dev",
     "dev:local": "NETLIFY_DEV=true npx netlify dev",
     "prepare": "husky"
@@ -36,6 +37,7 @@
     "lint-staged": "^16.4.0",
     "netlify-cli": "^26.0.0",
     "prettier": "^3.0.0",
-    "secretlint": "^11.7.1"
+    "secretlint": "^11.7.1",
+    "vitest": "^1.0.0"
   }
 }
