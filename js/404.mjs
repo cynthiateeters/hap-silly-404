@@ -221,6 +221,11 @@ function loadPose() {
   caption.textContent = pose.caption;
 }
 
+import { applyTheme, getInitialTheme, toggleTheme } from './theme.mjs';
+
+/* Initialize theme before doing other UI work */
+applyTheme(getInitialTheme());
+
 /* Run both loaders once on initial page load. */
 loadRoast();
 loadPose();
@@ -243,3 +248,14 @@ document.querySelector("#new-roast-btn").addEventListener("click", () => {
   loadRoast();
   loadPose();
 });
+
+/* Theme toggle wiring for the 404 page */
+const themeBtn = document.querySelector('#theme-toggle-btn');
+if (themeBtn) {
+  const isDark = document.documentElement.classList.contains('dark');
+  themeBtn.textContent = isDark ? '☀️' : '🌙';
+  themeBtn.addEventListener('click', () => {
+    const next = toggleTheme();
+    themeBtn.textContent = next === 'dark' ? '☀️' : '🌙';
+  });
+}
