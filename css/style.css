@@ -25,6 +25,17 @@
   --hap-max-width: 52rem;
 }
 
+/* Dark mode overrides applied when <html class="dark"> is present */
+html.dark {
+  --hap-bg: hsl(210, 20%, 12%);
+  --hap-text: hsl(210, 15%, 92%);
+  --hap-text-muted: hsl(210, 10%, 72%);
+  --hap-card-bg: hsl(210, 20%, 18%);
+  --hap-border: hsl(210, 20%, 28%);
+  --hap-orange: hsl(28, 90%, 58%);
+  --hap-brown: hsl(210, 10%, 78%);
+}
+
 body {
   font-family:
     system-ui,

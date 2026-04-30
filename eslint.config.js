@@ -35,4 +35,20 @@ export default [
       },
     },
   },
+
+  // Test files — run in Node with Web Request/Response globals (Vitest)
+  {
+    files: ["tests/**/*.js"],
+    languageOptions: {
+      ecmaVersion: 2022,
+      sourceType: "module",
+      globals: {
+        ...globals.node,
+        Request: "readonly",
+        Response: "readonly",
+        fetch: "readonly",
+        vi: "readonly",
+      },
+    },
+  },
 ];

@@ -148,6 +148,24 @@ export default async function handler(request) {
     });
   }
 
+  /* Intent prefilter: lightweight deterministic classifier to reject
+   * obviously off-topic requests (e.g., programming help) before we
+   * spend quota calling the Groq API. This keeps tests deterministic
+   * and avoids network calls for disallowed intents. The classifier
+   * is intentionally simple: it looks for a small allowlist of keywords
+   * that indicate the user is asking for a roast / 404 message.
+   *
+   * It is evaluated using the URL `q` parameter (if present). If no
+   * query text is present we conservatively allow the request so the
+   * page continues to work.
+   */
+  if (!isAllowedIntent(request)) {
+    return new Response(JSON.stringify({ error: "Forbidden." }), {
+      status: 403,
+      headers: corsHeaders,
+    });
+  }
+
   /* Read the API key from environment variables (set in the Netlify
    * dashboard). NEVER hard-code an API key in source. NEVER log its
    * value. If a key ever leaks, rotate it immediately. */
@@ -271,4 +289,50 @@ export default async function handler(request) {
  */
 function randomFallback() {
   return FALLBACK_INSULTS[Math.floor(Math.random() * FALLBACK_INSULTS.length)];
+}
+
+/**
+ * Lightweight deterministic intent prefilter.
+ * Returns true when the request looks like a 404/roast request and false
+ * for clearly off-topic prompts (e.g., programming help, math, etc.).
+ *
+ * The function intentionally keeps the logic simple and test-friendly.
+ * It checks the `q` query parameter for allowlist keywords. If no query
+ * is present, the request is allowed so the page still works when JavaScript
+ * hits the endpoint without a query string.
+ *
+ * @param {Request} request
+ * @returns {boolean}
+ */
+function isAllowedIntent(request) {
+  try {
+    const url = new URL(request.url);
+    const q = (url.searchParams.get("q") || "").toLowerCase().replace(/\+/g, " ").trim();
+
+    if (!q) return true; // no query; allow
+
+    // Allowlist tokens. Build simple word-boundary regexes to avoid
+    // accidental substring matches (e.g. 'programming' matching 'ram').
+    const allowTokens = [
+      "roast",
+      "404",
+      "page not found",
+      "insult",
+      "missing page",
+      "give me a roast",
+      "roast me",
+    ];
+
+    for (const t of allowTokens) {
+      // Escape regex special chars in token, then test with word boundaries
+      const escaped = t.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+      const re = new RegExp(`\\b${escaped}\\b`, "i");
+      if (re.test(q)) return true;
+    }
+
+    return false;
+  } catch {
+    // On any parsing error, be permissive so we don't block legitimate requests
+    return true;
+  }
 }
