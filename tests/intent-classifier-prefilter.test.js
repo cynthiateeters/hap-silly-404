@@ -71,4 +71,27 @@ describe("intent-classifier-prefilter (SDD/TDD)", () => {
     expect(res.status).toBe(403);
     expect(global.fetch).not.toHaveBeenCalled();
   });
+
+  it("allows empty query and returns a roast (or fallback)", async () => {
+    // Mock fetch to simulate Groq response when called
+    const mockResponse = {
+      ok: true,
+      json: async () => ({ choices: [{ message: { content: "Mock roast from Groq." } }] }),
+    };
+
+    global.fetch = vi.fn(async (url) => {
+      if (url && url.toString().includes("api.groq.com")) return mockResponse;
+      return { ok: false };
+    });
+
+    const handler = await loadHandler();
+
+    const req = new Request("http://localhost/.netlify/functions/insult", {
+      method: "GET",
+      headers: { origin: "http://localhost:8888" },
+    });
+
+    const res = await handler(req);
+    expect(res.status).toBe(200);
+  });
 });

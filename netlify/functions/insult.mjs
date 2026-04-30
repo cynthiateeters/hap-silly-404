@@ -311,7 +311,8 @@ function isAllowedIntent(request) {
 
     if (!q) return true; // no query; allow
 
-    // Simple allowlist: if any of these tokens appear we treat as allowed
+    // Allowlist tokens. Build simple word-boundary regexes to avoid
+    // accidental substring matches (e.g. 'programming' matching 'ram').
     const allowTokens = [
       "roast",
       "404",
@@ -323,7 +324,10 @@ function isAllowedIntent(request) {
     ];
 
     for (const t of allowTokens) {
-      if (q.includes(t)) return true;
+      // Escape regex special chars in token, then test with word boundaries
+      const escaped = t.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+      const re = new RegExp(`\\b${escaped}\\b`, "i");
+      if (re.test(q)) return true;
     }
 
     return false;
